@@ -1,221 +1,156 @@
-# 3DViewer v1.0
+# 3DViewer
 
-> При старте работы над проектом просим тебя постараться хронометрировать время работы над проектом.
-> По завершении работы над проектом, пожалуйста, ответь на два вопроса [в этом опросе](https://forms.gle/51aADrXJGHYH9jEi6)
+![C](https://img.shields.io/badge/C-11-blue.svg) ![Лицензия](https://img.shields.io/badge/Лицензия-MIT-green.svg) ![Статус](https://img.shields.io/badge/Статус-В_разработке-yellow.svg)
 
-Implementation of 3DViewer v1.0.
+Программа `3DViewer` — это приложение для визуализации каркасных 3D-моделей в трёхмерном пространстве. Разрабатывается на языке C стандарта C11 с использованием компилятора GCC и библиотеки Qt для графического интерфейса. Проект направлен на создание удобного инструмента для загрузки, преобразования и настройки отображения моделей формата `.obj`.
 
-The russian version of the task can be found in the repository.
+## Содержание
 
+- [Описание](#описание)
+- [Требования](#требования)
+- [Установка](#установка)
+- [Использование](#использование)
+- [Функциональность](#функциональность)
+- [Тестирование](#тестирование)
+- [Покрытие кода](#покрытие-кода)
+- [Как внести вклад](#как-внести-вклад)
+- [Лицензия](#лицензия)
 
-## Contents
+## Описание
 
-0. [Preamble](#preamble)
-1. [Chapter I](#chapter-i) \
-   1.1. [Introduction](#introduction)
-2. [Chapter II](#chapter-ii) \
-   2.1. [Information](#information)
-3. [Chapter III](#chapter-iii) \
-   3.1. [Part 1](#part-1-3dviewer) \
-   3.2. [Part 2](#part-2-bonus-settings) \
-   3.3. [Part 3](#part-3-bonus-record)
+`3DViewer` позволяет пользователям загружать каркасные модели из файлов формата `.obj`, выполнять аффинные преобразования (перемещение, поворот, масштабирование) и настраивать визуализацию (тип проекции, стиль ребер и вершин, цвет фона). Программа разрабатывается в соответствии с принципами структурного программирования и Google Style, с акцентом на производительность и удобство интерфейса.
 
+Код проекта размещён в папке `src`, а сборка настроена через `Makefile` с стандартными целями для GNU-программ.
 
-## Preamble
+## Требования
 
-![3DViewer](misc/images/3dviewer.png)
+- **Язык**: C11
+- **Компилятор**: GCC
+- **GUI-библиотека**: Qt (возможны альтернативы: GTK+, CEF и др.)
+- **Платформы**: Linux, macOS
+- **Производительность**: Поддержка моделей до 1 000 000 вершин без зависаний (> 0.5 сек)
+- **Ограничения**: Не загружать файлы > 10 МБ в репозиторий
 
-Somewhere around the water cooler in the '90s:
+### Зависимости
 
-*-- We can't make a cartoon about animals.*
+- GCC
+- Make
+- Qt (для GUI)
+- Библиотеки для тестирования (например, Check)
+- lcov (для отчётов покрытия, опционально)
 
-*- Why the hell not? John, your 'Tin Toy' has made a big splash! Imagine what will happen when the world sees something like '101 Dalmatians' in 3D!*
-
-*-- Well, that's the problem. There is not yet enough computing power to animate complex objects. The animals would have to wait because you can't simulate their fur. Either it will be a cartoon about bald animals. We have to wait a few years for Moore's Law to kick in.*
-
-*- Well, okay, what about humans? Why can't we do a cartoon about people?*
-
-*-- We can, except it would be a horror film, because their faces would look like yours right now, trying to convince me to make a fatal mistake.*
-
-You realised that Lasseter's arguments were too convincing and that there was no point in arguing.
-
-*- Fine, let's say you're right. But what cartoon should we make?*
-
-*-- That's easy, my friend. It will be a cartoon about toys, like the one that won us the Oscar. The natural shape of the toys will lend itself perfectly to the low-poly 3D models we'll be able to animate. And they're toys, so bad facial expressions won't be a problem. And I've already got a plot in mind. Let's bring it to life! The story will be based on the relationship between the toys and the child.*
-
-*- Sounds interesting!*
-
-*-- It is. You should go to your team and start developing 3D modelling software as soon as possible. If we want to make this cartoon, we need our own software tools. The ones on the market will only allow us to animate a wooden pyramid, and then only in the form of a cube.*
-
-*- Okay, but first, we need to do the most important thing - the preview screen.*
-
-*-- Good luck!*
-
-Pixar had over 100 computers to render the 3D scenes. Recognising the potential of such power, you gave an inspirational speech to your team praising 3D visualisation technology and then got straight to work! This cartoon will go down in history...
-
-
-## Chapter I
-
-## Introduction
-
-In this project you will implement a program for viewing 3D wireframe models (3D Viewer) in the C programming language. The models themselves must be loaded from .obj files and be viewable on screen with the ability to rotate, scale and translate
-
-
-## Chapter II
-
-## Information
-
-A wireframe model is a model of an object in 3D graphics, which is a set of vertices and edges that defines the shape of the displayed polyhedral object in three-dimensional space.
-
-### Structured programming reminder
-
-Structured programming based on two main principles:
-- The principle of divide and conquer (decomposition) - the principle of solving complex problems by decomposing them into many smaller subproblems, that are easier to understand and solve. Besides, there is no code duplication when solving subproblems and the solutions themselves are reused if necessary;
-- The principle of hierarchical ordering - the principle of organising the components of a problem into hierarchical tree structures with new details added at each level (from the top level with a single entry point, to the lower levels with specific data structures and implementations). That is, there should be no calculations and no input/output operations on the same level.
-
-Thus, using a structured style results in the program being built like a puff pastry pie from top to bottom. Errors are generated at the lower levels and thrown up to the top, where they are displayed to the user.
-
-### .Obj file format for representing the definition of 3D objects
-
-.Obj file is a geometry definition file format first developed by Wavefront Technologies. The file format is open and accepted by many 3D graphics application vendors.
-
-The .obj file format is a simple data format that represents only three-dimensional geometry, specifically the position of each vertex, the UV of each texture coordinate vertex, vertex normals and the faces that define each polygon as a list of vertices and texture vertices. Obj coordinates have no units, but Obj files can contain scale information in a readable comment line.
-
-The example of .obj file format:
-```
-  # List of geometric vertices, with (x, y, z [,w]) coordinates, w is optional and defaults to 1.0.
-  v 0.123 0.234 0.345 1.0
-  v ...
-  ...
-  # Texture coordinates (u, [,v ,w]), w is optional and default to 0.
-  vt 0.500 -1.352 [0.234]
-  vt ...
-  ...
-  # Normals (x,y,z)
-  vn 0.707 0.000 0.707
-  vn ...
-  ...
-  # Parameter space vertices (u [,v] [,w])
-  vn 0.707 0.000 0.707
-  vn ...
-  ...
-  # Polygonal face element
-  f v1 v2 v3
-  f ...
-  ...
-  # Group
-  g Group1
-  ...
-  # Object
-  o Object1
-  ```
-
-In this project you only need to implement support for vertex and face lists. Everything else is optional.
-
-### Affine transformations
-
-This section describes basic affine transformations (translation, rotation, scaling) in the plane, using two-dimensional objects (images) as an example. Similarly, affine transformations can also be used for three-dimensional space.
-
-An affine transformation is a mapping in a plane or in space onto itself, in which parallel lines become parallel lines, intersecting lines become intersecting lines, and oblique lines become oblique lines.
-A transformation in a plane is called affine if it is mutually unambiguous and the image of any line is a line. A transformation (mapping) is called mutually unambiguous (bijective) if it transforms different points into different points, and each point is transformed into a point.
-
-In algebraic terms, an affine transformation is a transformation of the form _f(x) = M x + v_, where _M_ is some invertible matrix and _v_ is some value.
-
-Properties of affine transformations:
-- A composition of affine transformations is an affine transformation too
-- The inverse of an affine transformation is an affine transformation too
-- The ratio of areas is conserved.
-- The ratio of lengths of line segments is conserved.
-
-#### Translation
-
-Translation matrix in uniform two-dimensional coordinates
-```
-1 0 a
-0 1 b
-0 0 1
+Установка на Linux:
+```bash
+sudo apt-get install gcc make qt5-default libcheck-dev lcov
 ```
 
-where _a_ and _b_ are the values on _x_ and _y_ by which the source point should be moved. Thus, to move a point, you must multiply the translation matrix by it.
-```
-x1     1 0 a     x 
-y1  =  0 1 b    y
-1      0 0 1     1
+Установка на macOS:
+```bash
+brew install gcc make qt check lcov
 ```
 
-where _x_ and _y_ are the original coordinates of the point and _x1_ and _y1_ are the resulting coordinates of the new point after translation.
+## Установка
 
-#### Rotation
+1. Склонируйте репозиторий:
+   ```bash
+   git clone https://github.com/yourusername/3DViewer.git
+   cd 3DViewer
+   ```
 
-Clockwise rotation matrix in uniform two-dimensional coordinates
+2. Соберите и установите программу:
+   ```bash
+   make all
+   make install
+   ```
+
+3. (Опционально) Удалите установленные файлы:
+   ```bash
+   make uninstall
+   ```
+
+4. Очистите временные файлы:
+   ```bash
+   make clean
+   ```
+
+Программа будет установлена в произвольный каталог (указывается в `Makefile`).
+
+## Использование
+
+После установки запустите программу:
+```bash
+./3DViewer
 ```
-cos(a)  sin(a) 0
--sin(a) cos(a) 0
-0       0      1
+
+1. Нажмите кнопку "Выбрать файл" и загрузите модель `.obj`.
+2. Используйте поля ввода и кнопки для перемещения, поворота или масштабирования модели.
+3. Настройте визуализацию через меню настроек.
+4. Сохраните изображение или GIF-анимацию (при наличии дополнительных функций).
+
+## Функциональность
+
+### Основные возможности (Part 1)
+- Загрузка каркасных моделей из файлов `.obj` (вершины и поверхности).
+- Перемещение модели по осям X, Y, Z.
+- Поворот модели вокруг осей X, Y, Z.
+- Масштабирование модели.
+- Графический интерфейс с:
+  - Кнопкой выбора файла и отображением его имени.
+  - Зоной визуализации модели.
+  - Полями и кнопками для управления преобразованиями.
+  - Информацией о модели (имя файла, количество вершин и рёбер).
+
+### Дополнительные настройки (Part 2)
+- Выбор типа проекции: параллельная или центральная.
+- Настройка рёбер: тип (сплошная/пунктирная), цвет, толщина.
+- Настройка вершин: способ отображения (нет/круг/квадрат), цвет, размер.
+- Выбор цвета фона.
+- Сохранение настроек между запусками.
+
+### Дополнительная запись (Part 3)
+- Сохранение изображений в форматах `.bmp` и `.jpeg`.
+- Запись GIF-анимаций (640x480, 10 FPS, 5 секунд) с аффинными преобразованиями.
+
+## Тестирование
+
+Модули загрузки моделей и аффинных преобразований должны быть покрыты юнит-тестами. Для запуска тестов:
+```bash
+make tests
 ```
 
-where _a_ is the rotation angle in two-dimensional space. To get the coordinates of the new point it is necessary to multiply the rotation matrix by the original point in the same way as the translation matrix
-```
-x1     cos(a)  sin(a) 0     x 
-y1  =  -sin(a) cos(a) 0    y
-1      0       0      1     1
-```
+Тесты проверяют:
+- Корректность загрузки `.obj`-файлов.
+- Точность перемещения, поворота и масштабирования.
+- Обработку граничных случаев (например, пустые файлы или некорректные данные).
 
-#### Scaling
+## Покрытие кода
 
-Scaling matrix in uniform two-dimensional coordinates
-```
-a 0 0
-0 b 0
-0 0 1
+Для анализа покрытия кода тестами:
+```bash
+make gcov_report
 ```
 
-where _a_ and _b_ are the scaling factors for the OX and OY axes respectively. Obtaining coordinates of a new point is similar to the cases described above.
+Отчёт будет сгенерирован в папке `report/` в формате HTML. Откройте `report/index.html` для просмотра.
 
+## Как внести вклад
 
-## Chapter III
+Приветствуются любые улучшения! Чтобы помочь проекту:
 
-## Part 1. 3DViewer
+1. Сделайте форк репозитория.
+2. Создайте новую ветку (`git checkout -b feature/ваше-улучшение`).
+3. Внесите изменения и закоммитьте их (`git commit -m "Добавлена новая функция"`).
+4. Отправьте изменения в свой форк (`git push origin feature/ваше-улучшение`).
+5. Откройте Pull Request.
 
-You need to develop a program to visualise 3D wireframe models:
+Следуйте Google Style и убедитесь, что код проходит тесты (`make tests`).
 
-- The program must be developed in C language of C11 standard using gcc compiler. You can use any additional QT libraries and modules;
-- The program code must be located in the src folder;
-- The program must be built with Makefile which contains standard set of targets for GNU-programs: all, install, uninstall, clean, dvi, dist, tests, gcov. Installation directory could be arbitrary, except the building one;
-- The program must be developed according to the principles of structured programming;
-- When writing code it is necessary to follow the Google style;
-- Prepare full coverage of modules related to model loading and affine transformations with unit-tests;
-- There should be only one model on the screen at a time;
-- The program must provide the ability to:
-    - Load a wireframe model from an obj file (vertices and surfaces list support only);
-    - Translate the model by a given distance in relation to the X, Y, Z axes;
-    - Rotate the model by a given angle relative to its X, Y, Z axes;
-    - Scale the model by a given value;
-- GUI implementation, based on any GUI library with API for C89/C99/C11 <br/>
-  * For Linix: GTK+, CEF, Qt<br/>
-  * For Mac: GTK+, Nuklear, raygui, microui, libagar, libui, IUP, LCUI, CEF, Qt;
-- The graphical user interface must contain:
-    - A button to select the model file and a field to output its name;
-    - A visualisation area for the wireframe model;
-    - Button/buttons and input fields for translating the model;
-    - Button/buttons and input fields for rotating the model;
-    - Button/buttons and input fields for scaling the model;
-    - Information about the uploaded model - file name, number of vertices and edges;
-- The program must correctly process and allow user to view models with details up to 100, 1000, 10,000, 100,000, 1,000,000  vertices without freezing (a freeze is an interface inactivity of more than 0.5 seconds).
+### Полезные команды
+- Создание документации: `make dvi`
+- Упаковка проекта в архив: `make dist`
+- Проверка покрытия: `make gcov_report`
 
-*Note:* **Don't upload heavy files (>10 mb) to git.**
+## Лицензия
 
-## Part 2. Bonus. Settings
+Проект распространяется под лицензией MIT. Подробности см. в файле [LICENSE](LICENSE).
 
-- The program must allow customizing the type of projection (parallel and central);
-- The program must allow setting up the type (solid, dashed), color and thickness of the edges, display method (none, circle, square), color and size of the vertices;
-- The program must allow choosing the background color;
-- Settings must be saved between program restarts.
-
-## Part 3. Bonus. Record
-
-- The program must allow saving the captured (rendered) images as bmp and jpeg files;
-- The program must allow recording small screencasts by a special button - the current custom affine transformation of the loaded object into gif-animation (640x480, 10fps, 5s).
-
-
-💡 [Tap here](https://forms.yandex.ru/cloud/641815b8e010db24ff2687a4/) **to leave your feedback on the project.** Product Team really tries to make your educational experience better.
+---
